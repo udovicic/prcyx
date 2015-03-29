@@ -17,30 +17,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-define('BP', __DIR__ . '/');
-define('DS', DIRECTORY_SEPARATOR);
-define('PS', PATH_SEPARATOR);
-define('DEVELOP', isset($_SERVER['DEVELOPER_MODE']) ? true : false);
+namespace Framework\Model;
 
-// Reset include paths
-set_include_path(implode(PS, array(
-    BP . 'App/',
-    BP . 'lib/'
-)));
-
-// Setup autoloader
-spl_autoload_register(function($class) {
-    include str_replace('\\', DS, $class) . '.php';
-});
-
-// PHP setting for application behaviour
-if (DEVELOP) {
-    error_reporting(-1);
-    ini_set('display_errors', 1);
-    ini_set('log_errors', 0);
-} else {
-    error_reporting(0);
-    ini_set('display_errors', 0);
-    ini_set('log_errors', 1);
-    ini_set('error_log', BP . 'var/log/php-error.log');
+/**
+ * Class Logger
+ *
+ * @category    Inchoo
+ * @package     Framework\Model
+ * @author      Stjepan Udovičić <udovicic.stjepan@gmail.com>
+ * @copyright   Inchoo (http://inchoo.net)
+ * @license     http://www.gnu.org/licenses/gpl-3.0.html  GNU GENERAL PUBLIC LICENSE (Version 3)
+ */
+class Logger
+{
+    // TODO: To be implemented...
 }

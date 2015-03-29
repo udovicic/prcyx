@@ -1,2 +1,4 @@
 .idea
 /etc/config.php
+/var/session/*
+!/var/session/.gitkeep

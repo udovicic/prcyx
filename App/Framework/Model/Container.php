@@ -35,42 +35,46 @@ class Container
     /** @var array Interface implementation preferences */
     protected $_preference;
 
-    /** @var array Config holder */
-    protected $_config;
-
     /** @var array Previously created objects */
     protected $_loaded;
+
+    /** @var Config Configuration model */
+    protected $_config;
 
     /**
      * IoC container initialization
      */
     public function __construct()
     {
-        $this->_loadConfig();
+        $this->_config = $this->make('Framework\Model\Config');
+        $this->_config->loadConfig();
     }
 
     /**
-     * Read package configuration
+     * Replace \ with _ to make usable names for stage in array
      *
-     * If package is null, default config is assumed
-     *
-     * @param string|null $package Package name
+     * @param   string  $key Class name
+     * @return  string
      */
-    protected function _loadConfig($package = null)
+    protected function _underscore($key)
     {
-        $path = BP . 'App/' . $package;
-        $package = strtolower($package);
-
-        // App config
-        if (!$package) {
-            $path .= '..';
-            $package = 'base';
-        }
-
-        // Config already loaded
-        if (isset($this->_config[$package])) return;
-
-        // false if file does not exists
-        $this->_config[$package] = @include $path . '/etc/config.php';
+        return str_replace('\\', '_', $key);
     }
+
+    /**
+     * Returns instance of requested object. Defaults to singletons,
+     * unless specified otherwise by $newInstance
+     *
+     * @param   string  $key            Name of class to be instancieted
+     * @param   bool    $newInstance    If true, always return new instance
+     * @return  mixed   Return newly created object
+     * @throws \Exception
+     */
+    public function make($key, $newInstance = false)
+    {
+        // TODO: To be implemented...
+    }
+
+    // TODO: Make from config
+    // TODO: Make by reflection
 }
