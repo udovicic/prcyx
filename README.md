@@ -1,3 +1,3 @@
 # PRCYX
 
-Yet another PHP framework, written from my own amusment
+Yet another PHP framework, written from my own amusement
