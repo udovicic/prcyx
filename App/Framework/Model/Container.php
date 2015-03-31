@@ -75,6 +75,60 @@ class Container
         // TODO: To be implemented...
     }
 
-    // TODO: Make from config
-    // TODO: Make by reflection
+    protected function _buildWithConfig($object)
+    {
+        // TODO: To be implemented...
+    }
+
+    /**
+     * Build request object by analyzing constructor with reflection.
+     *
+     * @param string $object Class name
+     *
+     * @return mixed Instance of requested object
+     * @throws \Exception
+     */
+    protected function _buildWithReflection($object)
+    {
+        // TODO: fetch default interface implementation from config
+
+        if (!is_string($object) || !class_exists($object)) {
+            throw new \Exception("Object is not a class");
+        }
+
+        $hint = $this->_underscore($object);
+        if (isset($this->_loaded[$hint])) {
+            return $this->_loaded[$hint];
+        }
+
+        $ref = new \ReflectionClass($object);
+
+        if (!$constructor = $ref->getConstructor()) {
+            return new $object; // No constructor specified
+        }
+
+        // Resolve constructor parameters
+        $objParams = array();
+
+        /** @var \ReflectionParameter $param */
+        foreach ($constructor->getParameters() as $param) {
+            if ($class = $param->getClass()) {
+                $className = $class->getName();
+
+                if (isset($this->_preference[$className])) {
+                    $className = $this->_preference[$className];
+                }
+
+                $objParams[] = $this->_buildWithReflection($className);
+            } else {
+                // Parameter is non-object
+                $objParams[] = array_shift($args);
+            }
+        }
+
+        // Create new instance and store for future use
+        $this->_loaded[$hint] = $ref->newInstanceArgs($objParams);
+
+        return $this->_loaded[$hint];
+    }
 }
