@@ -58,5 +58,40 @@ class Config
         $this->_config[$package] = @include $path . '/etc/config.php';
     }
 
-    // TODO: Implement config getters
+    /**
+     * Retrieve config setting
+     *
+     * @param   string      $path   Path is separated by /
+     * @param   null|mixed  $default
+     * @return  mixed|null
+     */
+    public function getConfig($path, $default=null)
+    {
+        $_path = explode('/', $path);
+
+        // If package not specified, prepend base
+        if (!isset($this->_config[$_path[0]])) {
+            array_unshift($_path, 'base');
+        }
+
+        // Fetch value from path
+        $temp = &$this->_config;
+        foreach($_path as $key) {
+            if (!isset($temp[$key])) return $default; // Unset path
+            $temp = &$temp[$key];
+        }
+
+        return $temp;
+    }
+
+    /**
+     * Retrieve config setting as boolean
+     * 
+     * @param   string  $path
+     * @return  bool
+     */
+    public function getConfigFlag($path)
+    {
+        return ($this->getConfig($path, false)) ? true : false;
+    }
 }
